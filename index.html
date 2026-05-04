@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jasa CNC Router & Laser Cutting</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f5f5f5;
+}
+
+/* NAVBAR */
+.navbar {
+    background: #111;
+    color: #fff;
+    padding: 15px;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* HERO */
+.hero {
+    background: linear-gradient(to right, #0f9b0f, #38ef7d);
+    color: white;
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.hero h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.hero p {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.btn {
+    background: orange;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* SECTION */
+.section {
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.section h2 {
+    margin-bottom: 20px;
+}
+
+/* CARD */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* GALERI */
+.gallery img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+/* FORM */
+.form input, .form textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+}
+
+/* FOOTER */
+.footer {
+    background: #111;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="navbar">
+    JASA CNC ROUTER & LASER CUTTING
+</div>
+
+<div class="hero">
+    <h1>Jasa Cutting Presisi & Custom</h1>
+    <p>MDF | PVC | Akrilik | ACP</p>
+    <a href="#order" class="btn">Order Sekarang</a>
+</div>
+
+<div class="section">
+    <h2>Layanan Kami</h2>
+    <div class="cards">
+        <div class="card">
+            <h3>CNC Router</h3>
+            <p>Cutting MDF, PVC, kayu dengan hasil rapi dan presisi tinggi</p>
+        </div>
+        <div class="card">
+            <h3>Laser Cutting</h3>
+            <p>Potong & grafir akrilik, triplek, dan bahan tipis lainnya</p>
+        </div>
+        <div class="card">
+            <h3>Custom Design</h3>
+            <p>Bisa request desain sesuai kebutuhan</p>
+        </div>
+    </div>
+</div>
+
+<div class="section gallery">
+    <h2>Contoh Hasil</h2>
+    <div class="cards">
+        <img src="https://via.placeholder.com/300x200">
+        <img src="https://via.placeholder.com/300x200">
+        <img src="https://via.placeholder.com/300x200">
+    </div>
+</div>
+
+<div class="section form" id="order">
+    <h2>Form Order</h2>
+    <input type="text" id="nama" placeholder="Nama">
+    <input type="text" id="ukuran" placeholder="Ukuran (cm)">
+    <textarea id="keterangan" placeholder="Deskripsi / request"></textarea>
+    <button class="btn" onclick="kirimWA()">Kirim ke WhatsApp</button>
+</div>
+
+<div class="footer">
+    © 2026 Jasa CNC & Laser Cutting
+</div>
+
+<script>
+function kirimWA() {
+    let nama = document.getElementById("nama").value;
+    let ukuran = document.getElementById("ukuran").value;
+    let ket = document.getElementById("keterangan").value;
+
+    let pesan = `Halo, saya mau order:%0A
+Nama: ${nama}%0A
+Ukuran: ${ukuran}%0A
+Detail: ${ket}`;
+
+    let nomor = "628xxxxxxxxxx"; // GANTI NOMOR KAMU
+
+    window.open(`https://wa.me/${nomor}?text=${pesan}`, "_blank");
+}
+</script>
+
+</body>
+</html>
