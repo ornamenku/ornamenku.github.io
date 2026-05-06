@@ -84,12 +84,7 @@ async function cekOngkir() {
   const berat = document.getElementById("berat").value;
   const kurir = document.getElementById("kurir").value;
 
-  if (!tujuan || !berat) {
-    alert("Lengkapi data dulu!");
-    return;
-  }
-
-  document.getElementById("hasil").innerHTML = "Loading...";
+  console.log("KIRIM:", tujuan, berat, kurir);
 
   try {
     const res = await fetch("https://orna.ornamenku00.workers.dev", {
@@ -104,33 +99,16 @@ async function cekOngkir() {
       })
     });
 
-    const data = await res.json();
+    console.log("STATUS:", res.status);
 
-    console.log(data);
+    const text = await res.text();
+    console.log("RESPON:", text);
 
-    if (data.results && data.results.length > 0) {
-      let html = "";
-
-      data.results.forEach(item => {
-        html += `
-          <p>
-            <b>${item.courier.toUpperCase()} - ${item.service}</b><br>
-            Harga: Rp ${item.cost.toLocaleString()}<br>
-            Estimasi: ${item.etd}
-          </p>
-          <hr>
-        `;
-      });
-
-      document.getElementById("hasil").innerHTML = html;
-
-    } else {
-      document.getElementById("hasil").innerHTML =
-        "Data ongkir tidak ditemukan";
-    }
+    document.getElementById("hasil").innerText = text;
 
   } catch (err) {
-    document.getElementById("hasil").innerHTML =
+    console.log("ERROR:", err);
+    document.getElementById("hasil").innerText =
       "Error: " + err.message;
   }
 }
