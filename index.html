@@ -2,114 +2,165 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Cek Ongkir Cileunyi</title>
+  <title>Cek Ongkir</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
     body {
-      font-family: Arial;
-      background: #f0f2f5;
-      padding: 20px;
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      margin: 0;
+      padding: 0;
     }
+
     .container {
-      max-width: 420px;
-      margin: auto;
-      background: white;
-      padding: 20px;
+      max-width: 500px;
+      margin: 50px auto;
+      background: #fff;
+      padding: 25px;
       border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
     }
-    h2 {
+
+    h1 {
       text-align: center;
+      margin-bottom: 20px;
     }
-    select, input, button {
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 15px;
+    }
+
+    input, select {
       width: 100%;
       padding: 10px;
-      margin-top: 10px;
-      border-radius: 6px;
+      margin-top: 5px;
+      border-radius: 8px;
       border: 1px solid #ccc;
+      font-size: 14px;
     }
+
     button {
-      background: #28a745;
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      background: #4f46e5;
       color: white;
       border: none;
+      border-radius: 8px;
+      font-size: 16px;
       cursor: pointer;
     }
+
     button:hover {
-      background: #218838;
+      background: #4338ca;
     }
+
     .result {
+      margin-top: 20px;
+    }
+
+    .card {
+      background: #f9fafb;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 10px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .loading {
+      text-align: center;
       margin-top: 15px;
-      background: #f9f9f9;
-      padding: 10px;
-      border-radius: 6px;
+      color: #666;
+    }
+
+    .error {
+      color: red;
+      margin-top: 10px;
+      text-align: center;
     }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <h2>Cek Ongkir</h2>
-  <p><b>Asal:</b> Cileunyi (Bandung)</p>
+  <h1>Cek Ongkir</h1>
 
-  <!-- Kota Tujuan -->
-  <select id="kota">
-    <option value="">-- Pilih Kota Tujuan --</option>
-    <option value="CGK">Jakarta</option>
-    <option value="SUB">Surabaya</option>
-    <option value="SMG">Semarang</option>
-    <option value="YOG">Yogyakarta</option>
-    <option value="DPS">Denpasar</option>
-    <option value="BDO">Bandung</option>
-  </select>
+  <label>Origin (ID Kota)</label>
+  <input type="text" id="origin" placeholder="Contoh: 501">
 
-  <!-- Berat -->
-  <input id="berat" type="number" placeholder="Berat (gram)">
+  <label>Destination (ID Kota)</label>
+  <input type="text" id="destination" placeholder="Contoh: 114">
 
-  <!-- Kurir -->
-  <select id="kurir">
+  <label>Berat (gram)</label>
+  <input type="number" id="weight" placeholder="Contoh: 1000">
+
+  <label>Kurir</label>
+  <select id="courier">
     <option value="jne">JNE</option>
-    <option value="jnt">J&T</option>
-    <option value="sicepat">SiCepat</option>
+    <option value="pos">POS</option>
+    <option value="tiki">TIKI</option>
   </select>
 
   <button onclick="cekOngkir()">Cek Ongkir</button>
 
-  <div class="result" id="hasil">
-    Hasil ongkir akan muncul di sini
-  </div>
+  <div class="loading" id="loading"></div>
+  <div class="error" id="error"></div>
+  <div class="result" id="result"></div>
 </div>
 
 <script>
 async function cekOngkir() {
-  const tujuan = document.getElementById("kota").value;
-  const berat = document.getElementById("berat").value;
-  const kurir = document.getElementById("kurir").value;
+  const origin = document.getElementById("origin").value;
+  const destination = document.getElementById("destination").value;
+  const weight = document.getElementById("weight").value;
+  const courier = document.getElementById("courier").value;
 
-  console.log("KIRIM:", tujuan, berat, kurir);
+  const loading = document.getElementById("loading");
+  const result = document.getElementById("result");
+  const error = document.getElementById("error");
+
+  result.innerHTML = "";
+  error.innerHTML = "";
+  loading.innerHTML = "Loading...";
 
   try {
-    const res = await fetch("https://orna.ornamenku00.workers.dev", {
+    const response = await fetch("https://YOUR-WORKER-URL/ongkir", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        destination: tujuan,
-        weight: parseInt(berat),
-        courier: kurir
+        origin,
+        destination,
+        weight,
+        courier
       })
     });
 
-    console.log("STATUS:", res.status);
+    const data = await response.json();
+    loading.innerHTML = "";
 
-    const text = await res.text();
-    console.log("RESPON:", text);
+    const costs = data.rajaongkir.results[0].costs;
 
-    document.getElementById("hasil").innerText = text;
+    costs.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "card";
+
+      card.innerHTML = `
+        <strong>${item.service}</strong><br>
+        Estimasi: ${item.cost[0].etd} hari<br>
+        Harga: Rp ${item.cost[0].value.toLocaleString()}
+      `;
+
+      result.appendChild(card);
+    });
 
   } catch (err) {
-    console.log("ERROR:", err);
-    document.getElementById("hasil").innerText =
-      "Error: " + err.message;
+    loading.innerHTML = "";
+    error.innerHTML = "Gagal mengambil data.";
   }
 }
 </script>
