@@ -1,164 +1,184 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Cek Ongkir</title>
+
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
 }
 
-body {
-  font-family: Arial, sans-serif;
-  background: #f5f7fb;
-  color: #222;
-  padding: 20px;
+body{
+  font-family:Arial,sans-serif;
+  background:#f5f7fb;
+  padding:20px;
+  color:#222;
 }
 
-.container {
-  max-width: 700px;
-  margin: auto;
+.container{
+  max-width:700px;
+  margin:auto;
 }
 
-.card {
-  background: white;
-  border-radius: 14px;
-  padding: 20px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+.card{
+  background:white;
+  padding:20px;
+  border-radius:16px;
+  box-shadow:0 4px 20px rgba(0,0,0,0.08);
 }
 
-h1 {
-  font-size: 28px;
-  margin-bottom: 10px;
+h1{
+  margin-bottom:10px;
 }
 
-p {
-  color: #666;
-  margin-bottom: 20px;
+.desc{
+  color:#666;
+  margin-bottom:20px;
 }
 
-label {
-  display: block;
-  margin-top: 15px;
-  margin-bottom: 8px;
-  font-weight: bold;
+label{
+  display:block;
+  margin-top:15px;
+  margin-bottom:8px;
+  font-weight:bold;
 }
 
 select,
 input,
-button {
-  width: 100%;
-  padding: 14px;
-  border-radius: 10px;
-  border: 1px solid #ddd;
-  font-size: 15px;
+button{
+  width:100%;
+  padding:14px;
+  border-radius:10px;
+  border:1px solid #ddd;
+  font-size:15px;
 }
 
-button {
-  margin-top: 20px;
-  background: #2563eb;
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
+button{
+  margin-top:20px;
+  background:#2563eb;
+  color:white;
+  border:none;
+  cursor:pointer;
+  font-weight:bold;
 }
 
-button:hover {
-  background: #1d4ed8;
+button:hover{
+  background:#1d4ed8;
 }
 
-.loading {
-  text-align: center;
-  margin-top: 20px;
-  display: none;
+.loading{
+  text-align:center;
+  margin-top:20px;
+  display:none;
 }
 
-.results {
-  margin-top: 25px;
+.results{
+  margin-top:25px;
 }
 
-.result-card {
-  background: white;
-  border-radius: 14px;
-  padding: 16px;
-  margin-bottom: 14px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
-  border-left: 6px solid #2563eb;
+.result-card{
+  background:white;
+  border-radius:14px;
+  padding:16px;
+  margin-bottom:14px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.06);
+  border-left:6px solid #2563eb;
 }
 
-.result-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
+.result-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
 }
 
-.courier {
-  font-size: 18px;
-  font-weight: bold;
+.courier{
+  font-size:18px;
+  font-weight:bold;
 }
 
-.price {
-  font-size: 20px;
-  color: #16a34a;
-  font-weight: bold;
+.price{
+  font-size:20px;
+  color:#16a34a;
+  font-weight:bold;
 }
 
-.estimation {
-  color: #666;
-  margin-top: 5px;
+.estimation{
+  color:#666;
+  margin-top:5px;
 }
 
-.badges {
-  margin-top: 10px;
+.badges{
+  margin-top:10px;
 }
 
-.badge {
-  display: inline-block;
-  padding: 5px 10px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: bold;
-  margin-right: 8px;
+.badge{
+  display:inline-block;
+  padding:5px 10px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:bold;
+  margin-right:8px;
 }
 
-.badge-cheapest {
-  background: #dcfce7;
-  color: #166534;
+.badge-cheapest{
+  background:#dcfce7;
+  color:#166534;
 }
 
-.badge-fastest {
-  background: #dbeafe;
-  color: #1d4ed8;
+.badge-fastest{
+  background:#dbeafe;
+  color:#1d4ed8;
 }
 
-.footer {
-  text-align: center;
-  margin-top: 20px;
-  color: #888;
-  font-size: 13px;
+.footer{
+  text-align:center;
+  margin-top:20px;
+  color:#888;
+  font-size:13px;
+}
+
+pre{
+  white-space:pre-wrap;
+  overflow:auto;
+  font-size:12px;
+  background:#f3f4f6;
+  padding:10px;
+  border-radius:10px;
 }
 
 @media(max-width:600px){
-  .result-top {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
+
+  .result-top{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:8px;
   }
+
 }
+
 </style>
 </head>
 <body>
 
 <div class="container">
-  <div class="card">
-    <h1>Cek Ongkir</h1>
-    <p>Asal pengiriman: Cimekar, Cileunyi, Bandung</p>
 
-    <label>Provinsi Tujuan</label>
+  <div class="card">
+
+    <h1>Cek Ongkir</h1>
+
+    <div class="desc">
+      Asal Pengiriman:
+      Cimekar, Cileunyi, Bandung
+    </div>
+
+    <label>Provinsi</label>
     <select id="province">
       <option value="">Pilih Provinsi</option>
     </select>
@@ -179,13 +199,22 @@ button:hover {
     </select>
 
     <label>Berat Paket (Kg)</label>
-    <input type="number" id="weight" min="0.1" step="0.1" placeholder="Contoh: 1" />
+    <input
+      type="number"
+      id="weight"
+      min="0.1"
+      step="0.1"
+      placeholder="Contoh: 1"
+    >
 
-    <button onclick="checkShipping()">Cek Ongkir</button>
+    <button onclick="checkShipping()">
+      Cek Ongkir
+    </button>
 
     <div class="loading" id="loading">
       Memuat ongkir...
     </div>
+
   </div>
 
   <div class="results" id="results"></div>
@@ -193,189 +222,322 @@ button:hover {
   <div class="footer">
     Powered by API.co.id + Cloudflare Worker
   </div>
+
 </div>
 
 <script>
-const API_BASE = "https://orna.ornamenku00.workers.dev";
+
+// GANTI DENGAN URL WORKER ANDA
+const API_BASE = "https://NAMA-WORKER-ANDA.workers.dev";
+
+// ORIGIN CIMEKAR
 const ORIGIN_VILLAGE_CODE = "3204052003";
 
+// ELEMENTS
 const provinceSelect = document.getElementById("province");
 const regencySelect = document.getElementById("regency");
 const districtSelect = document.getElementById("district");
 const villageSelect = document.getElementById("village");
+
 const loading = document.getElementById("loading");
 const results = document.getElementById("results");
 
-async function fetchJSON(url) {
+// FETCH JSON
+async function fetchJSON(url){
+
   const res = await fetch(url);
+
   return await res.json();
 }
 
-async function loadProvinces() {
-  const data = await fetchJSON(`${API_BASE}/provinces`);
+// LOAD PROVINCES
+async function loadProvinces(){
 
-  provinceSelect.innerHTML = '<option value="">Pilih Provinsi</option>';
+  const data = await fetchJSON(
+    `${API_BASE}/provinces`
+  );
+
+  provinceSelect.innerHTML =
+    '<option value="">Pilih Provinsi</option>';
 
   data.data.forEach(item => {
+
     provinceSelect.innerHTML += `
-      <option value="${item.code}">${item.name}</option>
+      <option value="${item.code}">
+        ${item.name}
+      </option>
     `;
+
   });
+
 }
 
+// PROVINCE CHANGE
 provinceSelect.addEventListener("change", async () => {
+
   const code = provinceSelect.value;
 
   regencySelect.disabled = true;
   districtSelect.disabled = true;
   villageSelect.disabled = true;
 
-  regencySelect.innerHTML = '<option value="">Loading...</option>';
+  regencySelect.innerHTML =
+    '<option>Loading...</option>';
 
-  const data = await fetchJSON(`${API_BASE}/regencies/${code}`);
+  const data = await fetchJSON(
+    `${API_BASE}/regencies/${code}`
+  );
 
-  regencySelect.innerHTML = '<option value="">Pilih Kabupaten</option>';
+  regencySelect.innerHTML =
+    '<option value="">Pilih Kabupaten</option>';
 
   data.data.forEach(item => {
+
     regencySelect.innerHTML += `
-      <option value="${item.code}">${item.name}</option>
+      <option value="${item.code}">
+        ${item.name}
+      </option>
     `;
+
   });
 
   regencySelect.disabled = false;
+
 });
 
+// REGENCY CHANGE
 regencySelect.addEventListener("change", async () => {
+
   const code = regencySelect.value;
 
   districtSelect.disabled = true;
   villageSelect.disabled = true;
 
-  districtSelect.innerHTML = '<option value="">Loading...</option>';
+  districtSelect.innerHTML =
+    '<option>Loading...</option>';
 
-  const data = await fetchJSON(`${API_BASE}/districts/${code}`);
+  const data = await fetchJSON(
+    `${API_BASE}/districts/${code}`
+  );
 
-  districtSelect.innerHTML = '<option value="">Pilih Kecamatan</option>';
+  districtSelect.innerHTML =
+    '<option value="">Pilih Kecamatan</option>';
 
   data.data.forEach(item => {
+
     districtSelect.innerHTML += `
-      <option value="${item.code}">${item.name}</option>
+      <option value="${item.code}">
+        ${item.name}
+      </option>
     `;
+
   });
 
   districtSelect.disabled = false;
+
 });
 
+// DISTRICT CHANGE
 districtSelect.addEventListener("change", async () => {
+
   const code = districtSelect.value;
 
   villageSelect.disabled = true;
 
-  villageSelect.innerHTML = '<option value="">Loading...</option>';
+  villageSelect.innerHTML =
+    '<option>Loading...</option>';
 
-  const data = await fetchJSON(`${API_BASE}/villages/${code}`);
+  const data = await fetchJSON(
+    `${API_BASE}/villages/${code}`
+  );
 
-  villageSelect.innerHTML = '<option value="">Pilih Desa</option>';
+  villageSelect.innerHTML =
+    '<option value="">Pilih Desa</option>';
 
   data.data.forEach(item => {
+
     villageSelect.innerHTML += `
-      <option value="${item.code}">${item.name}</option>
+      <option value="${item.code}">
+        ${item.name}
+      </option>
     `;
+
   });
 
   villageSelect.disabled = false;
+
 });
 
-function extractDays(estimation) {
-  if (!estimation) return 999;
+// EXTRACT DAYS
+function extractDays(estimation){
+
+  if(!estimation) return 999;
 
   const match = estimation.match(/\d+/);
 
   return match ? parseInt(match[0]) : 999;
 }
 
-async function checkShipping() {
-  const destination = villageSelect.value;
-  const weight = document.getElementById("weight").value;
+// CHECK SHIPPING
+async function checkShipping(){
 
-  if (!destination) {
+  const destination = villageSelect.value;
+
+  const weight =
+    document.getElementById("weight").value;
+
+  // VALIDASI
+  if(!destination){
+
     alert("Pilih desa tujuan");
+
     return;
   }
 
-  if (!weight || weight <= 0) {
+  if(!weight || weight <= 0){
+
     alert("Masukkan berat paket");
+
     return;
   }
 
   loading.style.display = "block";
+
   results.innerHTML = "";
 
-  try {
+  try{
+
     const data = await fetchJSON(
       `${API_BASE}/shipping-cost?origin=${ORIGIN_VILLAGE_CODE}&destination=${destination}&weight=${weight}`
     );
 
-    if (!data.result || data.result.length === 0) {
+    console.log(data);
+
+    const ongkirList =
+      data.result || data.data || [];
+
+    // KOSONG
+    if(ongkirList.length === 0){
+
       results.innerHTML = `
         <div class="result-card">
-          Tidak ada ongkir tersedia.
+
+          <strong>
+            Tidak ada ongkir tersedia
+          </strong>
+
+          <br><br>
+
+          <pre>
+${JSON.stringify(data, null, 2)}
+          </pre>
+
         </div>
       `;
+
+      loading.style.display = "none";
+
       return;
     }
 
-    const sorted = [...data.result].sort((a,b) => a.price - b.price);
+    // SORT TERMURAH
+    const sorted = [...ongkirList].sort((a,b) => {
+      return a.price - b.price;
+    });
 
+    // TERMURAH
     const cheapest = sorted[0];
 
-    const fastest = [...data.result].sort((a,b) => {
-      return extractDays(a.estimation) - extractDays(b.estimation);
+    // TERCEPAT
+    const fastest = [...ongkirList].sort((a,b) => {
+      return extractDays(a.estimation)
+      - extractDays(b.estimation);
     })[0];
 
+    // RENDER
     sorted.forEach(item => {
-      const isCheapest = item.courier_code === cheapest.courier_code;
-      const isFastest = item.courier_code === fastest.courier_code;
+
+      const isCheapest =
+        item.courier_code === cheapest.courier_code;
+
+      const isFastest =
+        item.courier_code === fastest.courier_code;
 
       results.innerHTML += `
         <div class="result-card">
+
           <div class="result-top">
+
             <div>
-              <div class="courier">${item.courier_name}</div>
-              <div>${item.courier_code}</div>
+
+              <div class="courier">
+                ${item.courier_name}
+              </div>
+
+              <div>
+                ${item.courier_code}
+              </div>
+
             </div>
 
             <div class="price">
-              Rp ${Number(item.price).toLocaleString("id-ID")}
+              Rp ${Number(item.price)
+                .toLocaleString("id-ID")}
             </div>
+
           </div>
 
           <div class="estimation">
-            Estimasi: ${item.estimation || "Tidak tersedia"}
+            Estimasi:
+            ${item.estimation || "Tidak tersedia"}
           </div>
 
           <div class="badges">
-            ${isCheapest ? '<span class="badge badge-cheapest">TERMURAH</span>' : ''}
-            ${isFastest ? '<span class="badge badge-fastest">TERCEPAT</span>' : ''}
+
+            ${
+              isCheapest
+              ? '<span class="badge badge-cheapest">TERMURAH</span>'
+              : ''
+            }
+
+            ${
+              isFastest
+              ? '<span class="badge badge-fastest">TERCEPAT</span>'
+              : ''
+            }
+
           </div>
+
         </div>
       `;
+
     });
 
-  } catch(err) {
-    console.error(err);
+  }catch(error){
+
+    console.error(error);
 
     results.innerHTML = `
       <div class="result-card">
-        Terjadi kesalahan saat mengambil data.
+
+        <strong>Terjadi Error</strong>
+
+        <br><br>
+
+        <pre>${error}</pre>
+
       </div>
     `;
+
   }
 
   loading.style.display = "none";
+
 }
 
+// START
 loadProvinces();
+
 </script>
 
 </body>
