@@ -180,7 +180,7 @@ pre{
 
     <label>Provinsi</label>
     <select id="province">
-      <option value="">Pilih Provinsi</option>
+      <option value="">Loading...</option>
     </select>
 
     <label>Kabupaten / Kota</label>
@@ -198,6 +198,19 @@ pre{
       <option value="">Pilih Desa</option>
     </select>
 
+    <label>Ekspedisi</label>
+    <select id="courier">
+      <option value="all">Semua Kurir</option>
+      <option value="JNE">JNE</option>
+      <option value="JT">J&T</option>
+      <option value="SiCepat">SiCepat</option>
+      <option value="anteraja">AnterAja</option>
+      <option value="Ninja">Ninja Express</option>
+      <option value="lion">Lion Parcel</option>
+      <option value="SAP">SAP Express</option>
+      <option value="paxel">Paxel</option>
+    </select>
+
     <label>Berat Paket (Kg)</label>
     <input
       type="number"
@@ -212,7 +225,7 @@ pre{
     </button>
 
     <div class="loading" id="loading">
-      Memuat ongkir...
+      Memuat...
     </div>
 
   </div>
@@ -233,11 +246,12 @@ const API_BASE = "https://orna.ornamenku00.workers.dev";
 // ORIGIN CIMEKAR
 const ORIGIN_VILLAGE_CODE = "3204052003";
 
-// ELEMENTS
+// ELEMENT
 const provinceSelect = document.getElementById("province");
 const regencySelect = document.getElementById("regency");
 const districtSelect = document.getElementById("district");
 const villageSelect = document.getElementById("village");
+const courierSelect = document.getElementById("courier");
 
 const loading = document.getElementById("loading");
 const results = document.getElementById("results");
@@ -245,30 +259,63 @@ const results = document.getElementById("results");
 // FETCH JSON
 async function fetchJSON(url){
 
-  const res = await fetch(url);
+  const response = await fetch(url);
 
-  return await res.json();
+  const text = await response.text();
+
+  try{
+    return JSON.parse(text);
+  }catch{
+    return {
+      error:true,
+      raw:text
+    };
+  }
+
 }
 
 // LOAD PROVINCES
 async function loadProvinces(){
 
-  const data = await fetchJSON(
-    `${API_BASE}/provinces`
-  );
+  try{
 
-  provinceSelect.innerHTML =
-    '<option value="">Pilih Provinsi</option>';
+    const data = await fetchJSON(
+      `${API_BASE}/provinces`
+    );
 
-  data.data.forEach(item => {
+    console.log("PROVINCES:", data);
 
-    provinceSelect.innerHTML += `
-      <option value="${item.code}">
-        ${item.name}
-      </option>
-    `;
+    if(!data.data){
 
-  });
+      results.innerHTML = `
+        <div class="result-card">
+          <strong>Gagal load provinsi</strong>
+          <br><br>
+          <pre>${JSON.stringify(data, null, 2)}</pre>
+        </div>
+      `;
+
+      return;
+    }
+
+    provinceSelect.innerHTML =
+      '<option value="">Pilih Provinsi</option>';
+
+    data.data.forEach(item => {
+
+      provinceSelect.innerHTML += `
+        <option value="${item.code}">
+          ${item.name}
+        </option>
+      `;
+
+    });
+
+  }catch(error){
+
+    console.error(error);
+
+  }
 
 }
 
@@ -280,9 +327,6 @@ provinceSelect.addEventListener("change", async () => {
   regencySelect.disabled = true;
   districtSelect.disabled = true;
   villageSelect.disabled = true;
-
-  regencySelect.innerHTML =
-    '<option>Loading...</option>';
 
   const data = await fetchJSON(
     `${API_BASE}/regencies/${code}`
@@ -313,9 +357,6 @@ regencySelect.addEventListener("change", async () => {
   districtSelect.disabled = true;
   villageSelect.disabled = true;
 
-  districtSelect.innerHTML =
-    '<option>Loading...</option>';
-
   const data = await fetchJSON(
     `${API_BASE}/districts/${code}`
   );
@@ -343,9 +384,6 @@ districtSelect.addEventListener("change", async () => {
   const code = districtSelect.value;
 
   villageSelect.disabled = true;
-
-  villageSelect.innerHTML =
-    '<option>Loading...</option>';
 
   const data = await fetchJSON(
     `${API_BASE}/villages/${code}`
@@ -375,7 +413,9 @@ function extractDays(estimation){
 
   const match = estimation.match(/\d+/);
 
-  return match ? parseInt(match[0]) : 999;
+  return match
+    ? parseInt(match[0])
+    : 999;
 }
 
 // CHECK SHIPPING
@@ -386,7 +426,9 @@ async function checkShipping(){
   const weight =
     document.getElementById("weight").value;
 
-  // VALIDASI
+  const selectedCourier =
+    courierSelect.value;
+
   if(!destination){
 
     alert("Pilih desa tujuan");
@@ -396,7 +438,7 @@ async function checkShipping(){
 
   if(!weight || weight <= 0){
 
-    alert("Masukkan berat paket");
+    alert("Masukkan berat");
 
     return;
   }
@@ -411,20 +453,29 @@ async function checkShipping(){
       `${API_BASE}/shipping-cost?origin=${ORIGIN_VILLAGE_CODE}&destination=${destination}&weight=${weight}`
     );
 
-    console.log(data);
+    console.log("ONGKIR:", data);
 
     const ongkirList =
       data.result || data.data || [];
 
-    // KOSONG
-    if(ongkirList.length === 0){
+    // FILTER KURIR
+    let filteredList = ongkirList;
+
+    if(selectedCourier !== "all"){
+
+      filteredList = ongkirList.filter(item => {
+        return item.courier_code === selectedCourier;
+      });
+
+    }
+
+    // JIKA KOSONG
+    if(filteredList.length === 0){
 
       results.innerHTML = `
         <div class="result-card">
 
-          <strong>
-            Tidak ada ongkir tersedia
-          </strong>
+          <strong>Tidak ada ongkir tersedia</strong>
 
           <br><br>
 
@@ -441,7 +492,7 @@ ${JSON.stringify(data, null, 2)}
     }
 
     // SORT TERMURAH
-    const sorted = [...ongkirList].sort((a,b) => {
+    const sorted = [...filteredList].sort((a,b) => {
       return a.price - b.price;
     });
 
@@ -449,7 +500,7 @@ ${JSON.stringify(data, null, 2)}
     const cheapest = sorted[0];
 
     // TERCEPAT
-    const fastest = [...ongkirList].sort((a,b) => {
+    const fastest = [...filteredList].sort((a,b) => {
       return extractDays(a.estimation)
       - extractDays(b.estimation);
     })[0];
@@ -520,7 +571,7 @@ ${JSON.stringify(data, null, 2)}
     results.innerHTML = `
       <div class="result-card">
 
-        <strong>Terjadi Error</strong>
+        <strong>Error</strong>
 
         <br><br>
 
